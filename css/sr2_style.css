@@ -1,0 +1,128 @@
+@charset "utf-8";
+
+/* ===== 全体背景＆中央表示 ===== */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    background: #dbf2f5;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #4e4e4e;
+    font-size: 18px; /* 文章を大きく */
+}
+
+/* ===== 見出し ===== */
+h1 {
+    font-size: 3em;
+    color: #4e4e4e;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+    text-align: left; /* 見出しも左寄せ */
+}
+h2 {
+    font-size: 2.5em;
+    color: #4e4e4e;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+    text-align: left;
+}
+h3 {
+    font-size: 2em;
+    color: #4e4e4e;
+    text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+    text-align: left;
+}
+
+/* ===== リンク ===== */
+a {
+    color: #b77af9;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+a:hover {
+    color: #81d4fa;
+    text-shadow: 0 0 5px #81d4fa;
+}
+
+/* ===== ボタン風リンク ===== */
+.button {
+    display: inline-block;
+    background: #81d4fa;
+    color: #034f84;
+    padding: 12px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.button:hover {
+    background: #4fc3f7;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+/* ===== カードやパネル ===== */
+.card {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    padding: 50px 40px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    backdrop-filter: blur(8px);
+    max-width: 700px;
+    text-align: left; /* ←左寄せに変更 */
+    font-size: 18px;
+}
+
+/* ===== 箇条書き・番号調整 ===== */
+.card ol {
+    counter-reset: item;
+    list-style: none;
+    padding-left: 35px;
+    margin: 10px 0;
+}
+
+.card ol li {
+    counter-increment: item;
+    position: relative;
+    padding-left: 35px;
+    margin: 6px 0;
+}
+
+.card ol li::before {
+    content: counter(item) ".";
+    position: absolute;
+    left: 0;
+    color: #0277bd;
+    font-weight: bold;
+}
+
+.card ul {
+    padding-left: 25px;
+    margin: 10px 0;
+}
+
+.card li {
+    margin: 6px 0;
+}
+
+/* ===== スクロールバー ===== */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #d0f4f7;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #81d4fa;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4fc3f7;
+}
