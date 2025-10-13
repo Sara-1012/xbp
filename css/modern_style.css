@@ -1,0 +1,70 @@
+@charset "utf-8";
+
+body {
+  font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
+  background-color: #f8fbfd; /* 淡い水色 */
+  color: #555; /* 落ち着いたグレー */
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  margin: 60px auto;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(180, 210, 230, 0.3);
+  max-width: 1000px;
+}
+
+.left-image {
+  width: 40%;
+  max-width: 350px;
+  object-fit: contain;
+}
+
+.right-text {
+  width: 55%;
+}
+
+.right-text h2 {
+  color: #2a5d8f; /* 見出しは少し濃い青み */
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.right-text h3 {
+  font-size: 1.2em;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+.right-text p {
+  line-height: 1.8;
+  font-size: 1em;
+  color: #666;
+}
+
+/* スマホ対応 */
+@media screen and (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .left-image, .right-text {
+    width: 100%;
+  }
+}
+
+h1 {
+  font-size: 40px;   /* 文字の大きさ */
+  margin-left: 40px; /* 左の余白 */
+  margin-top: 40px;  /* 上の余白 */
+  margin-bottom: 10px; /* 下の余白 */
+  color: #333;       /* 文字の色（任意） */
+  font-weight: bold; /* 太字（デフォルトだけど明示してもOK） */
+}
