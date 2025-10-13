@@ -1,0 +1,95 @@
+@charset "utf-8";
+
+/* 全体設定 */
+body {
+  background-color: #f9f7fc; /* ほんのりラベンダーがかった淡い背景 */
+  color: #888; /* 通常文字は淡いグレー */
+  font-family: "Rounded Mplus 1c", "Hiragino Maru Gothic ProN", sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  padding-top: 80px; /* ページ全体の上に80pxの余白 */
+  padding-bottom: 100px; /* ページ全体の下に100pxの余白 */
+}
+
+/* コンテンツを中央寄せに */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* 太字（タイトルなど） */
+strong, h1, h2, h3 {
+  color: #b49ce1; /* 背景より少し濃い淡紫系 */
+  font-weight: 700;
+}
+
+/* 写真などの画像 */
+img {
+  display: block;
+  margin: 20px auto;
+  border-radius: 10px;
+  max-width: 80%;
+  box-shadow: 0 4px 12px rgba(180, 156, 225, 0.2);
+}
+
+/* スクロールバーを淡くかわいく */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f2edf9; /* 背景に近い淡紫 */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1c4ec; /* 少し濃い紫でアクセント */
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #c0b0e0; /* ホバーでちょっと濃く */
+}
+
+/* リンク */
+a {
+  color: #b49ce1;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+a:hover {
+  text-decoration: underline;
+  color: #a68ede;
+}
+
+/* 箇条書き */
+ul.cute-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  display: inline-block;
+  text-align: left;
+}
+
+ul.cute-list li {
+  position: relative;
+  margin: 10px 0;
+  padding-left: 25px;
+  font-size: 1.1em;
+  color: #888;
+}
+
+ul.cute-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #c7b5f1; /* 淡いラベンダー */
+  font-size: 1.4em;
+  line-height: 1;
+}
+
