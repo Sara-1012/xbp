@@ -1,0 +1,164 @@
+@charset "utf-8";
+
+/* 🩵 pastel blue theme 🩵 */
+
+body {
+  background-color: #e8f4fb; /* 淡い水色の背景 */
+  color: #6c7a89; /* ノーマル文字：淡いグレー系 */
+  font-family: "Hiragino Sans", "Arial", sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0 20px;
+}
+
+/* 🩵 太字文字（見出しや強調用） */
+strong, h1, h2, h3, h4, h5 {
+  color: #4aa3d8; /* 濃いめの水色 */
+}
+
+/* 🩵 リンク */
+a {
+  color: #4aa3d8;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #2e8cc4; /* ホバー時に少し濃い水色 */
+}
+
+/* 🩵 背景コンテナ（白寄りにしたい場合） */
+.container {
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  padding: 30px;
+  margin: 40px auto;
+  max-width: 800px;
+  box-shadow: 0 0 15px rgba(173, 216, 230, 0.3);
+}
+
+/* 🩵 スクロールバー */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #e8f4fb;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #b3e0f7;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #7cc4e7;
+}
+
+/* 🩵 かわいい箇条書き */
+ul.cute-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 600px;
+}
+ul.cute-list li {
+  position: relative;
+  background: #f0f9ff;
+  border-left: 5px solid #7cc4e7;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  color: #5c6b77;
+  font-size: 1rem;
+}
+ul.cute-list li::before {
+  content: "🩵";
+  position: absolute;
+  left: -1.5em;
+  top: 0.2em;
+}
+
+/* 🩵写真とテキストを横並びに */
+
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  color: #555;
+  background-color: #f8fcff;
+  margin: 0;
+  padding: 0;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 60px auto;
+  max-width: 900px;
+  gap: 40px;
+  padding: 20px;
+}
+
+/* 🩵画像の共通設定 */
+.section img {
+  width: 45%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 🩵テキストの共通設定 */
+.text {
+  width: 45%;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* 🩵左右反転（画像右・テキスト左） */
+.reverse {
+  flex-direction: row-reverse;
+}
+
+/* 🩵見出し */
+h2 {
+  font-size: 2rem;
+  color: #4da6ff;
+  margin-bottom: 15px;
+}
+
+section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 20px;
+  position: relative; /* 線を中央に固定するために必要 */
+}
+
+/* 🩵テキスト横並び、真ん中に線 */
+.section.with-center-line::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background-color: #aee0ff;
+  transform: translateX(-50%);
+}
+
+.text {
+  width: 45%;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+h2 {
+  font-size: 1.8rem;
+  color: #4da6ff;
+  margin-bottom: 15px;
+}
+
+/* 🩵各セクションごとの余白 */
+section, div {
+  margin-bottom: 60px; /* セクション間の余白 */
+}
