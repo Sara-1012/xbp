@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <!-- ⑥↓タイトルを変えてみよう -->
+    <title>ｽｽﾞｷの第4回</title>
+    <!-- ⑤スタイルシートの設定をしよう -->
+    <!-- h1.htmlからある行をコピペしてくればOK -->
+     <link rel="stylesheet" href="../css/skyblue_style.css">
+</head>
+<body>
+    <div>
+        <h1>第4回 pythonでミニゲーム</h1>
+        <h2>タイトル：1/100を当てるだけの運ゲー</h2>
+        <h3>製作理由</h3>
+        マトモでちょっと面白いゲームは他の人が作ってくれると思ったのでクソゲーに全振りしました。<br>
+        当たるまでenterを押して当たったらそれで終わりのゲームです。<br>
+    </div>
+    
+    <div>
+        <pre><code style="
+        background-color: #dbe7fa;       /* カードのような白背景 */
+        color: #0a3d91;                  /* 濃い青文字で統一感 */
+        font-size: 15px;                 /* 小さめで落ち着いた印象 */
+        padding: 12px 16px;              /* ゆとりのある余白 */
+        border-radius: 10px;             /* 角を丸くして柔らかく */
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* ふんわり影をつける */
+        display: block;
+        text-align: left;
+        font-family: Consolas, 'Courier New', monospace;
+        border-left: 6px solid #0a3d91;  /* 左に青いラインを入れてアクセント */
+        width: 60%;              /* カードの幅を全体の60%に（お好みで調整） */
+        margin: 20px auto;       /* 上下に余白＋中央寄せ */
+        background-clip: padding-box;
+        ">
+        
+        <h2>python ソースコード</h2>
+        import random
+
+#タイトル
+print("1/100を引かなきゃ終わらないクソゲー")
+
+#名前入力
+name=input("あなたの名前を教えてください")
+print("こんにちは！",name,"さん！運試しをしましょう！")
+
+#ゲーム本体
+count=0 #繰り返した回数を数えられる
+
+while True: #無限ループ
+    user=input("引きますか？( Enter=引く / q=やめる)") #入力
+    if user.lower()=="q": #やめるver
+        print(name,"さんは途中でやめました。残念です…")
+        break
+
+    result=random.randint(1,101) #1~100の乱数
+    count+=1 #繰り返し回数に＋１する
+
+    if result==1: #当たりver
+        print("✨当たり！✨")
+        print(name,"さんは",count,"回目で当たりました！やったね！")
+        print("ゲーム終了！こんなクソゲーをやってくれてありがとう！")
+        break #ここにbreak入れると当たった時ゲームが終わる
+    else: #ハズレver
+        print("❌ハズレ❌")
+        print("現在",count,"回目です。早く当たるといいね！")
+        #ここに絶対に！！！break入れない！！！ハズレの時繰り返されなくなるから！！！
+    </code></pre>
+
+    <h2>ゲームの様子(一部)</h2>
+    <div class="video"><iframe width="560" height="315" src="https://www.youtube.com/embed/ni858I6eNvM?si=jSA2FSyKQe2oXPQb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+
+   
+    <div>
+        <h2>感想</h2>
+        私たちが日々やっているゲームはすごいのだと身をもって知ることができた。<br>
+        色々調べながら試行錯誤しているとき、似たようなコードがあって<br>
+        <h3>「何が違うのか」「私が使いたいのはどっちなのか」</h3>
+        と悩むことがあった。調べて使えそうなコードを使ったのでこれが正解なのかわからないのが残念です。<br>
+        最終的に正直理解できたとは言えないが、なんとなく形にできたクソゲーになったと思います。
+    </div>
