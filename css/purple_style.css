@@ -1,0 +1,133 @@
+@charset "utf-8";
+
+/* 💜 pastel lavender theme 💜 */
+
+body {
+  background-color: #f3edfc; /* 淡いラベンダー背景 */
+  color: #5e5a6d; /* ノーマル文字：少し濃いグレーパープル */
+  font-family: "Hiragino Sans", "Arial", sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0 20px;
+}
+
+/* 💜 太字文字・見出し */
+strong, h1, h2, h3, h4, h5 {
+  color: #8a6dcf; /* 濃いめのパープルでアクセント */
+}
+
+/* 💜 リンク */
+a {
+  color: #8a6dcf;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+a:hover {
+  color: #6f4fb7; /* ホバー時に少し深めの紫 */
+}
+
+/* 💜 コンテンツ枠 */
+.container {
+  background-color: rgba(255, 255, 255, 0.8); /* 写真となじみすぎない白 */
+  border-radius: 10px;
+  padding: 30px;
+  margin: 40px auto;
+  max-width: 800px;
+  box-shadow: 0 0 15px rgba(160, 130, 210, 0.25); /* 柔らかい紫の影 */
+}
+
+/* 💜 スクロールバー */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #f3edfc;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #d3c4f2; /* 淡い紫 */
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #bda5e8; /* 少し濃く */
+}
+
+/* 💜 かわいい箇条書き */
+ul.cute-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 600px;
+}
+ul.cute-list li {
+  position: relative;
+  background: #f8f5ff; /* 白より少し紫を感じる背景 */
+  border-left: 5px solid #bda5e8;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+  color: #5c5268;
+  font-size: 1rem;
+}
+ul.cute-list li::before {
+  content: "💜";
+  position: absolute;
+  left: -1.5em;
+  top: 0.2em;
+}
+
+/* 💜 写真（白背景対策） */
+img {
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(100, 80, 150, 0.2); /* ふんわり影で浮かせる */
+  max-width: 90%;
+  height: auto;
+  margin: 20px 0;
+}
+
+/* コードブロック全体の見た目 */
+pre {
+  background-color: #f3edfc; /* 下地の薄い紫 */
+  border: 1px solid #d3c6f5; /* 少し濃い紫の枠線 */
+  border-radius: 8px;
+  padding: 1em;
+  overflow-x: auto;
+  font-family: "Fira Code", "Consolas", monospace;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #3d2b5a; /* メイン文字色（紫系の落ち着いた色） */
+}
+
+/* コードタグ内のテキスト */
+code {
+  background: transparent;
+  color: inherit;
+}
+
+/* コメント（#から始まる部分） */
+code::selection,
+pre::selection {
+  background-color: #d8c9fa;
+}
+
+/* 強調（キーワードなど） */
+code .keyword {
+  color: #8b5cf6; /* 鮮やかな紫 */
+  font-weight: 600;
+}
+
+/* 文字列（"..."など） */
+code .string {
+  color: #c084fc; /* 明るい紫ピンク */
+}
+
+/* 数値 */
+code .number {
+  color: #a78bfa;
+}
+
+/* 関数名 */
+code .function {
+  color: #6d28d9;
+  font-weight: 500;
+}

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <!-- ⑥↓タイトルを変えてみよう -->
+    <title>ｽｽﾞｷの第5回</title>
+    <!-- ⑤スタイルシートの設定をしよう -->
+    <!-- h1.htmlからある行をコピペしてくればOK -->
+     <link rel="stylesheet" href="../css/purple_style.css">
+</head>
+
+<body>
+    
+    <div>
+        <h1>第５回 openAIでプログラミング</h1>
+        <h2>💜 AIパーソナルカラー診断 💜</h2>
+        <h3>目次　(触ると飛べます)</h3>
+    <a href="#hajimeni">はじめに　</a>
+    <a href="#sippai1">Ver.1　</a>
+    <a href="#sippai2">Ver.2　</a>
+    <a href="#seikou">Ver.3　</a>
+    <a href="#matome">まとめ</a>
+    <a href="#sansyou">参照元</a>
+    </div>
+
+    <div>
+        <h2 id="hajimeni">はじめに</h2>
+        <h3>きっかけ</h3>
+        「 プログラミングで何ができるか 」から「 何をしたいか 」を考えたら辿り着きました。<br>
+        似合うコスメや服が欲しいのにどんな色が似合うのかわからない、<br>
+        自己診断があっているかわからないけどプロの診断に行くのも面倒くさい。<br>
+        でも診断したいと感じたからです。<br>
+        また従来のWebパーソナルカラー診断は自分で選択肢を選んでいくスタイルが多く、<br>
+        主観が入りやすいため正確とは言えないため、画像を使うことで正確になると考えました。<br>
+        <h3>ソースコードを使うのに必要なパッケージ(aiをどう使ったか)</h3>
+        <ul class="cute-list">
+            <li>[ pip install flask ]<br>
+            Webアプリ本体を作るために必要</li>
+            <li>[ pip install openai ]<br>
+            このAI(GPT)を使うために必要</li>
+            <li>[ pip install pillow ]<br>
+            画像の読み込み・処理をするのに必要</li>
+            <li>[ pip install numpy ]<br>
+            数値計算・平均値(色)を算出するのに必要</li>
+            <li>[ pip install scikit-image ]<br>
+            RBG値からLab値にするために必要</li>
+        </ul>
+        <h3>私のパーソナルカラーと正確さの判断について</h3>
+        私のパーソナルカラーは「winter・ブルベ冬」と呼ばれるタイプです。<br>
+        しかしこの診断はパーソナルカラーに詳しいがプロではない姉によるものです。<br>
+        ですが！！！ここでは姉を信じ、私のパーソナルカラーを<br>
+        「winter・ブルベ冬」とすることで診断が正確かどうか判断します。
+    </div>
+
+    <div>
+        <h2 id="sippai1">Ver.1</h2>
+        <h3>コード</h3>
+        <h2><a href="./PS_ver1.html">💜パーソナルカラー診断ver.1 (触ると飛べます)💜</a></h2>
+        <h3>結果-失敗！</h3>
+        <img src="images/PS_ver1.png" width="50%">
+        <section class="section with-center-line">
+            <div class="text">
+                <h3>失敗理由</h3>
+                <P>
+                    <ul class="cute-list">
+                        <li>OpenAiに人の外見、肌の色、顔など体の特徴などに基づいて判断することを制限する安全ルールがある</li>
+                    </ul>
+                </P>
+            </div>
+            <div class="text">
+                <h3>改善点</h3>
+                <p>
+                    <ul class="cute-list">
+                        <li>「肌」として認識、分析するのではなく「画像の色」として認識、分析させる。</li>
+                    </ul>
+                </p>
+            </div>
+    </div>
+
+    <div>
+        <h2 id="sippai2">Ver.2</h2>
+        <h3>コード</h3>
+        <h2><a href="./PS_ver2.html">💜パーソナルカラー診断ver.2 (触ると飛べます)💜</a></h2>
+        <h3>結果-失敗！</h3>
+        <img src="images/PS_ver2.png" width="50%">
+        <section class="section with-center-line">
+            <div class="text">
+                <h3>失敗理由</h3>
+                <P>
+                    <ul class="cute-list">
+                        <li>RGB値で診断すると正確な結果ではなかった<br>
+                            根拠：RGB値は「光の三原色の強度」で人が認識する「くすみ」「血色」など絶妙なものはわからない
+                        </li>
+                    </ul>
+                </P>
+            </div>
+            <div class="text">
+                <h3>失敗理由</h3>
+                <P>
+                    <ul class="cute-list">
+                        <li>Lab値(L:明度、a:赤み、b:黄み)+C(彩度)で診断する</li>
+                    </ul>
+                </P>
+            </div>
+    </div>
+
+    <div>
+        <h2 id="seikou">Ver.3</h2>
+        <h3>コード</h3>
+        <h2><a href="./PS_ver3.html">💜パーソナルカラー診断ver.3 (触ると飛べます)💜</a></h2>
+        <h3>結果-成功！</h3>
+        <img src="images/PS_ver3.png" width="50%">
+    </div>
+
+    <div>
+        <h2 id="matome">まとめ</h2>
+        <h3>改善点</h3>
+        <ul class="cute-list">
+            <li>診断結果がすごく見にくい</li>
+            <li>パーソナルカラーは４タイプだけではないので増やして(例:１６タイプ)<br>
+                より詳しく正確な診断をしたい</li>
+        </ul>
+        <h3>感想</h3>
+        aiにやって欲しいことや指示を正確に書くのは難しいと感じました。<br>
+        改善点にもある「診断結果がすごく見にくい」を改善しようと「分野ごとに改行をして」<br>
+        と書きましたがやってもらえませんでした。そのためaiをうまく使うには<br>
+        <h3>「 細かく・正確に 」</h3>指示しなければいけないと理解できました。<br>
+        またaiを駆使するにはまずは自分の日本語の力も重要だと気付かされました。
+    </div>
+
+    <div>
+        <h2 id="sansyou">参照元</h2>
+        今回はスマホ版ChatGPTを使ってコードを作りました。ありがとう！！<br>
+        <a href="https://chatgpt.com/?utm_source=google&utm_medium=paidsearch_brand&utm_campaign=GOOG_C_SEM_GBR_Core_CHT_BAU_ACQ_PER_MIX_ALL_APAC_JP_JA_120624&utm_term=chatgpt&utm_content=177552713902&utm_ad=755434329062&utm_match=p&gad_source=1&gad_campaignid=21990698763&gbraid=0AAAAA-IW-UXHKeVj8Q3RKgyXoJEd3Z36m&gclid=CjwKCAiA8bvIBhBJEiwAu5ayrE9mfzYOMJahJ5tXOqH5OLH4ks-84CYOGZYCjwDzoRZtJG_A3p-WGBoCuMAQAvD_BwE"
+        target="_blank">ChatGPT</a><br>
+    </div>
+    
+    <div>
+        <h2>おまけ：実行動画</h2>
+        <div class="video"><iframe width="560" height="315" src="https://www.youtube.com/embed/4zETj6HAB20?si=U-2_b8fi1pcu7ss8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+    </div>
+</body>
+<br><br><br>

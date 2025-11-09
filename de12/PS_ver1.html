@@ -1,0 +1,82 @@
+<code>
+<ol style="list-style:decimal-leading-zero outside;in-left:0;padding-left:36px;margin:0;background-color:#EEF;color:#000;">
+<li style="background-color:#EFF;">#Ver1</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">from flask import Flask, request, render_template_string</li>
+<li style="background-color:#EEF;">from openai import OpenAI</li>
+<li style="background-color:#EFF;">import base64</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">app = Flask(__name__)</li>
+<li style="background-color:#EEF;">client = OpenAI(api_key="あなたのOpenAI keyをここに入力”)  # ←ここに自分のOpenAIキーを貼る</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;"># HTMLテンプレート</li>
+<li style="background-color:#EFF;">html = """</li>
+<li style="background-color:#EEF;">&lt;!doctype html&gt;</li>
+<li style="background-color:#EFF;">&lt;html&gt;</li>
+<li style="background-color:#EEF;">&lt;head&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta charset="utf-8"&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;パーソナルカラー診断AI（手の甲）&lt;/title&gt;</li>
+<li style="background-color:#EFF;">&lt;/head&gt;</li>
+<li style="background-color:#EEF;">&lt;body style="font-family:sans-serif; text-align:center; margin-top:50px;"&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;パーソナルカラー診断AI（手の甲で診断）??&lt;/h2&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;手の甲の写真をアップロードすると、AIがあなたの肌トーンからパーソナルカラーを推定します。&lt;/p&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;form action="/analyze" method="post" enctype="multipart/form-data" style="margin-top:20px;"&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="file" name="image" accept="image/*" required&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;br&gt;&lt;br&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button type="submit"&gt;診断する&lt;/button&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/form&gt;</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;{% if result %}</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;hr&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h3&gt;診断結果 ?&lt;/h3&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div style="max-width:600px; margin:auto; text-align:left; font-size:18px;"&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ result | safe }}</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;{% endif %}</li>
+<li style="background-color:#EEF;">&lt;/body&gt;</li>
+<li style="background-color:#EFF;">&lt;/html&gt;</li>
+<li style="background-color:#EEF;">"""</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">@app.route("/", methods=["GET"])</li>
+<li style="background-color:#EFF;">def index():</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;return render_template_string(html)</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">@app.route("/analyze", methods=["POST"])</li>
+<li style="background-color:#EFF;">def analyze():</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;image_file = request.files["image"]</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;image_bytes = image_file.read()</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;image_base64 = base64.b64encode(image_bytes).decode("utf-8")</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;# OpenAIに画像を送信</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;response = client.chat.completions.create(</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model="gpt-4o-mini",  # 画像認識対応モデル</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messages=[</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"role": "user",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"content": [</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"type": "text",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"text": (</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"以下の画像は手の甲です。この画像から肌の色味・明るさ・血色などを分析し、"</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"4つのパーソナルカラータイプ（スプリング、サマー、オータム、ウィンター）の中から最も近いタイプを推定してください。"</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"そのうえで：\n"</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"1. 選ばれたタイプ名（例：スプリングタイプ）\n"</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"2. 診断理由（肌トーン・血色感などから見た根拠）\n"</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"3. 似合う色（服・メイク・アクセサリーなど）\n"</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"4. 避けた方がいい色（理由付き）\n"</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"を日本語でわかりやすく説明してください。"</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;),</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}}</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;)</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;result = response.choices[0].message.content</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;return render_template_string(html, result=result)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">if __name__ == "__main__":</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;app.run(debug=True)</li>
+<li style="background-color:#EFF;"></li>
+</ol></code>

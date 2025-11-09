@@ -1,0 +1,108 @@
+<code>
+<ol style="list-style:decimal-leading-zero outside;in-left:0;padding-left:36px;margin:0;background-color:#EEF;color:#000;">
+<li style="background-color:#EFF;">#Ver3</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">from flask import Flask, request, render_template_string</li>
+<li style="background-color:#EEF;">from openai import OpenAI</li>
+<li style="background-color:#EFF;">from PIL import Image</li>
+<li style="background-color:#EEF;">import numpy as np</li>
+<li style="background-color:#EFF;">import io</li>
+<li style="background-color:#EEF;">import base64</li>
+<li style="background-color:#EFF;">import os</li>
+<li style="background-color:#EEF;">from skimage import color  # ★ 追加：Lab変換に使用</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;"># === OpenAIクライアント設定 ===</li>
+<li style="background-color:#EFF;">client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY") or "あなたのOpenAI keyをここに入力")</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">app = Flask(__name__)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;"># === HTMLテンプレート ===</li>
+<li style="background-color:#EEF;">HTML_PAGE = """</li>
+<li style="background-color:#EFF;">&lt;!doctype html&gt;</li>
+<li style="background-color:#EEF;">&lt;html&gt;</li>
+<li style="background-color:#EFF;">&lt;head&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;パーソナルカラー診断（肌の写真）&lt;/title&gt;</li>
+<li style="background-color:#EFF;">&lt;/head&gt;</li>
+<li style="background-color:#EEF;">&lt;body&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;パーソナルカラー診断&lt;/h1&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;あなたの『 肌のみ 』が映った写真を『 .png 』形式のファイルをアップロードしてください。&lt;br&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;??注意??&lt;br&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;・顔などの個人情報が載らないようにしてください&lt;br&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;・光(自然光、白い電気)に当たった写真を使用することでより正確になります&lt;/p&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;form method="POST" enctype="multipart/form-data"&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="file" name="image" accept="image/*" required&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="submit" value="診断する"&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/form&gt;</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;{% if result %}</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;診断結果&lt;/h2&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;{{ result|safe }}&lt;/p&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;{% endif %}</li>
+<li style="background-color:#EFF;">&lt;/body&gt;</li>
+<li style="background-color:#EEF;">&lt;/html&gt;</li>
+<li style="background-color:#EFF;">"""</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">@app.route("/", methods=["GET", "POST"])</li>
+<li style="background-color:#EEF;">def index():</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;result = None</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;if request.method == "POST":</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file = request.files["image"]</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image_bytes = file.read()</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# === 画像から平均色を抽出 ===</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image = Image.open(io.BytesIO(image_bytes))</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image = image.convert("RGB").resize((100, 100))</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pixels = np.array(image).reshape(-1, 3) / 255.0  # 正規化（0〜1）</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# === RGB → Lab変換 ===</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;lab_pixels = color.rgb2lab(pixels.reshape(100, 100, 3))</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avg_lab = lab_pixels.reshape(-1, 3).mean(axis=0)</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L, a, b = avg_lab</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# === GPTへのプロンプト ===</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prompt = f"""</li>
+<li style="background-color:#EFF;">あなたはプロのパーソナルカラー診断士です。</li>
+<li style="background-color:#EEF;">次のLab値は L={L:.1f}, a={a:.1f}, b={b:.1f} です。</li>
+<li style="background-color:#EFF;">以下の条件にのみ従って、パーソナルカラーを診断してください。</li>
+<li style="background-color:#EEF;">絶対最初にパーソナルカラーを簡潔に書いてください。もし中途半端な結果であればどちらも記入してください。</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">条件:</li>
+<li style="background-color:#EFF;">1. 彩度C* = √(a? + b?)</li>
+<li style="background-color:#EEF;">2. イエベ/ブルベ判定は (b - a) による。</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;- b - a &gt; 10 → イエベ</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;- b - a &lt; 5 → ブルベ</li>
+<li style="background-color:#EFF;">3. 明るさ判定</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;- L &gt; 70 → 明るめ</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;- L &lt; 60 → 深め</li>
+<li style="background-color:#EEF;">4. 彩度判定</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;- C &gt; 35 → ビビッド</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;- C &lt; 25 → ソフト</li>
+<li style="background-color:#EFF;">5. これらを組み合わせて4シーズンを決定：</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;- Spring: b - a &gt; 10, L &gt; 70, C &gt; 35　です。</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;- Summer: b - a &lt; 5,  L &gt; 70, C &lt; 30　です。</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;- Autumn: b - a &gt; 10, L &lt; 60, C &lt; 30　です。</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;- Winter: b - a &lt; 5,  L &lt; 60, C &gt; 35　です。</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">この条件に従って、あなたが推測するパーソナルカラータイプを出し、</li>
+<li style="background-color:#EEF;">理由と似合う色、避けたほうがよい色を説明してください。</li>
+<li style="background-color:#EFF;">"""</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# === OpenAI API呼び出し ===</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response = client.chat.completions.create(</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model="gpt-4o-mini",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messages=[</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"role": "user", "content": prompt}</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = response.choices[0].message.content</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;return render_template_string(HTML_PAGE, result=result)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">if __name__ == "__main__":</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;app.run(debug=True)</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;</li>
+<li style="background-color:#EFF;"></li>
+</ol></code>

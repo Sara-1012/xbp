@@ -1,0 +1,81 @@
+<code>
+<ol style="list-style:decimal-leading-zero outside;in-left:0;padding-left:36px;margin:0;background-color:#EEF;color:#000;">
+<li style="background-color:#EFF;">#Ver2</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">from flask import Flask, request, render_template_string</li>
+<li style="background-color:#EEF;">from openai import OpenAI</li>
+<li style="background-color:#EFF;">from PIL import Image</li>
+<li style="background-color:#EEF;">import numpy as np</li>
+<li style="background-color:#EFF;">import io</li>
+<li style="background-color:#EEF;">import base64</li>
+<li style="background-color:#EFF;">import os</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;"># === OpenAIクライアント設定 ===</li>
+<li style="background-color:#EEF;"># 安全に環境変数から読み込む方法（または直接書いてもOK）</li>
+<li style="background-color:#EFF;">client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY") or "あなたのOpenAI keyをここに入力")</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">app = Flask(__name__)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;"># === HTMLテンプレート ===</li>
+<li style="background-color:#EEF;">HTML_PAGE = """</li>
+<li style="background-color:#EFF;">&lt;!doctype html&gt;</li>
+<li style="background-color:#EEF;">&lt;html&gt;</li>
+<li style="background-color:#EFF;">&lt;head&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;パーソナルカラー診断（手の写真）&lt;/title&gt;</li>
+<li style="background-color:#EFF;">&lt;/head&gt;</li>
+<li style="background-color:#EEF;">&lt;body&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;パーソナルカラー診断&lt;/h1&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;あなたの手の写真をアップロードしてください。（個人情報が載らないようにしてください）&lt;/p&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;form method="POST" enctype="multipart/form-data"&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="file" name="image" accept="image/*" required&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;input type="submit" value="診断する"&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/form&gt;</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;{% if result %}</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h2&gt;診断結果&lt;/h2&gt;</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;{{ result|safe }}&lt;/p&gt;</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;{% endif %}</li>
+<li style="background-color:#EEF;">&lt;/body&gt;</li>
+<li style="background-color:#EFF;">&lt;/html&gt;</li>
+<li style="background-color:#EEF;">"""</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">@app.route("/", methods=["GET", "POST"])</li>
+<li style="background-color:#EFF;">def index():</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;result = None</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;if request.method == "POST":</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;file = request.files["image"]</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image_bytes = file.read()</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# === 画像から平均色を抽出 ===</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image = Image.open(io.BytesIO(image_bytes))</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;image = image.convert("RGB").resize((100, 100))  # 小さくして平均化</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pixels = np.array(image).reshape(-1, 3)</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;avg_color = pixels.mean(axis=0)</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;r, g, b = [int(x) for x in avg_color]</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# === GPTへのプロンプト ===</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prompt = (</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f"次のRGB平均値は R={r}, G={g}, B={b} です。"</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"この色の傾向から、一般的なパーソナルカラー分類（スプリング、サマー、オータム、ウィンター）のうち、"</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"どのタイプに近いかを推測してください。"</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"また、その理由と、似合いやすい色・避けた方が良い色を具体的に説明してください。"</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# === OpenAI API呼び出し ===</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response = client.chat.completions.create(</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model="gpt-4o-mini",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messages=[</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{"role": "user", "content": prompt}</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result = response.choices[0].message.content</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;return render_template_string(HTML_PAGE, result=result)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">if __name__ == "__main__":</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;app.run(debug=True)</li>
+<li style="background-color:#EEF;"></li>
+</ol></code>
