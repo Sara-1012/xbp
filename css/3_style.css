@@ -1,0 +1,15 @@
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.image-grid img {
+  width: 100%;
+  height: auto;
+}
+.heading-box {
+  background: #e8f1ff;     /* 色付き背景 */
+  padding: 8px 16px;       /* 余白 */
+  border-radius: 12px;     /* 角丸 */
+  display: inline-block;   /* タイトルの長さに合わせる */
+}
