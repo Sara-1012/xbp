@@ -26,6 +26,9 @@ strong, h1, h2, h3 {
   color: #b49ce1; /* 背景より少し濃い淡紫系 */
   font-weight: 700;
 }
+h3 {
+  font-size: 1.4rem;
+}
 
 /* 写真などの画像 */
 img {

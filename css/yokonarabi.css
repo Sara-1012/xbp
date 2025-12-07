@@ -1,0 +1,46 @@
+/* 🩵写真とテキストを横並びに */
+
+body {
+  font-family: "Noto Sans JP", sans-serif;
+  color: #555;
+  background-color: #f8fcff;
+  margin: 0;
+  padding: 0;
+}
+
+.section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 60px auto;
+  max-width: 900px;
+  gap: 40px;
+  padding: 20px;
+}
+
+/* 🩵画像の共通設定 */
+.section img {
+  width: 45%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 🩵テキストの共通設定 */
+.text {
+  width: 45%;
+  font-size: 1.1rem;
+  line-height: 1.7;
+}
+
+/* 🩵左右反転（画像右・テキスト左） */
+.reverse {
+  flex-direction: row-reverse;
+}
+
+/* 🩵見出し */
+h2 {
+  font-size: 2rem;
+  color: #4da6ff;
+  margin-bottom: 15px;
+}

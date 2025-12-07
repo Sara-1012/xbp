@@ -1,0 +1,4 @@
+.uniform-img {
+  width: 60%;        /* 枠のどれくらいか*/
+  border-radius: 10px; /* 角丸（不要なら消してOK） */
+}
