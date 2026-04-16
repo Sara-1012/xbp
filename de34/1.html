@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <!-- ⑥↓タイトルを変えてみよう -->
+    <title>ｽｽﾞｷの第1回</title>
+    <!-- ⑤スタイルシートの設定をしよう -->
+    <!-- h1.htmlからある行をコピペしてくればOK -->
+     <link rel="stylesheet" href="../css/copy_button.css">
+     <link rel="stylesheet" href="../css/img_same_size.css">
+     <link rel="stylesheet" href="../css/section_card.css">
+     <link rel="stylesheet" href="../css/yokonarabi.css">
+     <link rel="stylesheet" href="../css/kawaii_style.css">
+</head>
+
+<body>
+    <div>
+        <h1>Auduino</h1>
+        <h2>LEDと明るさセンサーの基本</h2>
+        <h3>目次　(触ると飛べます)</h3>
+        <a herf="#Auduino">Auduinoとは？　</a>
+        <a href="#led">LED　</a>
+        <a href="#akarusa">明るさセンサー　</a>
+        <a href="#konngou">LED×明るさセンサー　</a>
+    </div>
+
+    <div>
+        <h2 id="Auduino">Auduinoとは？</h2> 
+        <main class="site">
+            <section class="section-card"> 
+        <h3>何に使われてる？</h3>
+        <div class="meta"></div>
+        <p>
+            センサーやLEDなどをつなげられる「小さなコンピュータみたいな基板」です。<br>
+            自分でプログラムを書くことで、<br>
+            ・センサーの情報を読み取ったり<br>
+            ・モーターを動かしたり<br>
+            ・LEDを光らせたり<br>
+            といったことが簡単にできて、企業のプロトタイプや電子工作に使われます。
+        </p>
+        <h3>実際の写真</h3>
+        <img src="images/Arduino_1.png">
+        </section>
+    </div>
+
+    <div>
+        <h2 id="led">LED</h2>
+        <main class="site">
+            <section class="section-card"> 
+        <h3>チカチカさせる</h3>
+        <div class="meta"></div>
+        LEDを500ms点灯、500ms消灯するプログラム<br>
+        ⚠️点灯または消灯の時間が短いとずっと消灯または点灯しているように見えるので程々に！
+        <img src="images/LED_1.png">
+
+        </section>
+    </div>
+
+    <div>
+        <h2 id="akarusa">明るさセンサー</h2>
+        <main class="site">
+            <section class="section-card"> 
+        <h3>明るさを測定する</h3>
+        <div class="meta"></div>
+        明るさを500msおきに計測するプログラム<br>
+        ⚠️明るさは数値が小さいほど明るく、大きいほど暗いです<br>
+
+        <img src="images/serial_1.png">
+        </section>
+    </div>
+
+    <div>
+        <h2 id="konngou">LED×明るさセンサー</h2>
+        <main class="site">
+            <section class="section-card"> 
+        <h3>暗かったらLEDをつける</h3>
+        <div class="meta"></div>
+        明るさの数値が100より小さい時LEDを点灯し、それ以外は消灯するプログラム<br>
+        ⚠️明るさの数値はCdSセルの個体差で変わるので数値は各々で調整してね！<br>
+        <img src="images/konngou_1.png">
+        </section>
+    </div>
+
+    <div></div>
+</body>

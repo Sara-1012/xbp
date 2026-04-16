@@ -1,0 +1,17 @@
+.image-box {
+  position: relative;
+  display: inline-block;
+}
+
+/* 画像 */
+.image-box img {
+  width: 300px;
+  display: block;
+}
+
+/* ボタンを右上に固定 */
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
