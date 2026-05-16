@@ -1,0 +1,168 @@
+<code>
+<ol style="list-style:decimal-leading-zero outside;in-left:0;padding-left:36px;margin:0;background-color:#EEF;color:#000;">
+<li style="background-color:#EFF;">from flask import Flask, render_template, request</li>
+<li style="background-color:#EEF;">from openai import OpenAI</li>
+<li style="background-color:#EFF;">import os</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">app = Flask(__name__)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;"># OpenAI APIキー</li>
+<li style="background-color:#EEF;">client = OpenAI(</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;api_key="ここにopenAI key"</li>
+<li style="background-color:#EEF;">)</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;"># ギャル文字変換辞書</li>
+<li style="background-color:#EFF;">GYARU_DICT = {</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"あ": "ぁ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"い": "ﾚヽ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"う": "ぅ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"え": "ぇ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"お": "ぉ",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"か": "ヵゝ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"き": "(ｷ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"く": "&lt;",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"け": "ﾚ†",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"こ": "⊇",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"さ": "±",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"し": "∪",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"す": "£",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"せ": "せ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"そ": "ξ",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"た": "ﾅﾆ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ち": "ち",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"つ": "⊃",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"て": "τ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"と": "`⊂",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"な": "ﾅょ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"に": "ﾚﾆ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ぬ": "ゐ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ね": "ね",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"の": "σ",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"は": "ﾚよ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ひ": "?",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ふ": "､ζ､",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"へ": "∧",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ほ": "ﾚま",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ま": "ま",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"み": "ゐ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"む": "£",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"め": "め",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"も": "も",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"や": "ゃ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ゆ": "ゅ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"よ": "∋",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ら": "ζ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"り": "L|",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"る": "ゑ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"れ": "れ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ろ": "З",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"わ": "ゎ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"を": "ぉ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ん": "ω",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"が": "ヵゞ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ぎ": "(ｷ″",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ぐ": "&lt;″",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"げ": "ﾚ†″",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ご": "⊇″",</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"じ": "∪″",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"で": "τ″",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"ば": "ﾚよ″",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ぱ": "ﾚよ°",</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ア": "了",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"イ": "ｨ",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ウ": "ゥ",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;"エ": "工",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"オ": "才",</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ル": "儿",</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;"ー": "━"</li>
+<li style="background-color:#EFF;">}</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">def convert_gyaru(text):</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;result = ""</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;for char in text:</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if char in GYARU_DICT:</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result += GYARU_DICT[char]</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;else:</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result += char</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;return result</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">@app.route("/", methods=["GET", "POST"])</li>
+<li style="background-color:#EFF;">def index():</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;original_text = ""</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;gyaru_text = ""</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;gyaru_moji_text = ""</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;if request.method == "POST":</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;original_text = request.form.get("text")</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;try:</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;prompt = f"""</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;次の文章を平成ギャル風の文章に変換してください。</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;条件：</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;・テンション高め</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;・かわいく</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;・盛り気味</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;・語尾に?や〜を使ってOK</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;・自然なギャル口調</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;文章：</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{original_text}</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"""</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response = client.chat.completions.create(</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model="gpt-3.5-turbo",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messages=[</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"role": "user",</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"content": prompt</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# GPTでギャル文へ</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gyaru_text = response.choices[0].message.content</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# ギャル文字化</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gyaru_moji_text = convert_gyaru(gyaru_text)</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;except Exception as e:</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gyaru_text = f"エラーが発生しました：{e}"</li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;return render_template(</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"index.html",</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;original_text=original_text,</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gyaru_text=gyaru_text,</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gyaru_moji_text=gyaru_moji_text</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;)</li>
+<li style="background-color:#EFF;"></li>
+<li style="background-color:#EEF;"></li>
+<li style="background-color:#EFF;">if __name__ == "__main__":</li>
+<li style="background-color:#EEF;">&nbsp;&nbsp;&nbsp;&nbsp;port = int(os.environ.get("PORT", 3000))</li>
+<li style="background-color:#EFF;">&nbsp;&nbsp;&nbsp;&nbsp;app.run(host="0.0.0.0", port=port)</li>
+</ol></code>
