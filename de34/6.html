@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="jp">
+<head>
+    <!-- ⑥↓タイトルを変えてみよう -->
+    <title>ｽｽﾞｷの第6回</title>
+    <!-- ⑤スタイルシートの設定をしよう -->
+    <!-- h1.htmlからある行をコピペしてくればOK -->
+     <link rel="stylesheet" href="../css/copy_button.css">
+     <link rel="stylesheet" href="../css/img_same_size.css">
+     <link rel="stylesheet" href="../css/section_card.css">
+     <link rel="stylesheet" href="../css/yokonarabi.css">
+     <link rel="stylesheet" href="../css/kawaii_style.css">
+</head>
+
+<body>
+    <div>
+        <h1>SQLの利用</h1>
+        <h2>SQLを使ってWebアプリを作る
+        </h2>
+        <h3>目次　(触ると飛べます)</h3>
+        <a herf="#SQL">SQLとは？　</a>
+        <a href="#WebAPP">Webアプリ　</a>
+        <a href="#kansou">感想　</a>
+    </div>
+
+    <div>
+        <h2 id="SQL">SQLとは？</h2> 
+        <main class="site">
+            <section class="section-card"> 
+        <h3>SQLとは</h3>
+        <div class="meta"></div>
+        <p>
+            リレーショナルデータベース(注1)に情報を格納および処理するためのプログラミング言語です。<br>
+            リレーショナルデータベースは、情報を表形式で格納します。<br>
+            行と列は、さまざまなデータ属性と、データ値間のさまざまな関係を表します。<br>
+            SQL ステートメント(注2)を使用して、データベース(注3)から情報を<br>
+            格納、更新、削除、検索、および取得できます。<br>
+            SQL を使用して、データベースのパフォーマンスを維持したり最適化したりすることもできます。<br>
+            <br>
+            (注1)リレーショナルデータベース：データを「行（レコード）」と「列（カラム）」<br>
+            からなる表（テーブル）の形式で管理し、複数の表同士を関連付けて扱うデータベースのこと<br>
+            (注2)SQLステートメント：リレーショナルデータベースに対してデータの<br>
+            検索、追加、更新、削除などの命令を出すために記述する「SQL文」全体のこと<br>
+            (注3)データベース：特定のルールに従って整理・蓄積されたデータの集まり<br>
+        </p>
+        <h3>用途</h3>
+        <div class="meta"></div>
+        <p>
+            大量のデータから必要な情報を瞬時に検索・抽出し、<br>
+            データの追加・更新・削除などを効率的に行うために使用されます。<br>
+            (例)Webサイト・アプリの運営：SNSやECサイトにおいて、<br>
+            ユーザーアカウント情報、商品カタログ、投稿データなどをデータベースから呼び出し、画面に表示する
+        </p>
+        <h3>仕組み</h3>
+        <div class="meta"></div>
+        <img src="images/SQL_1.png">
+        </section>
+    </div>
+
+    <div>
+        <h2 id="WebAPP">Webアプリ</h2>
+        <main class="site">
+            <section class="section-card"> 
+        <h3>内容</h3>
+        「未来の自分が写真を見て、その日の記憶を思い出せること」をコンセプトにした、シンプルな日記Webアプリです。<br>
+        ユーザーは毎日、お気に入りの写真・一言メモ・感情タグを気軽に投稿できます。<br>
+        投稿は文章必須ではなく、写真だけや感情タグだけでも記録できるため、無理なく続けられます。<br>
+        投稿した写真は正方形サムネイルで一覧表示され、クリックするとその日の思い出を読み返せます。<br>
+        ⭐お気に入り機能により、「人生で好きだった日」をまとめて振り返ることもできます。<br>
+        
+        <h3>動画</h3>
+        <div class="video"><iframe width="560" height="315" src="https://www.youtube.com/embed/mCJnKLD13a8?si=gg0JGncBdzT7Nh5G" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
+
+        </section>
+    </div>
+
+    <div>
+        <h2 id="kansou">感想</h2>
+        <main class="site">
+            <section class="section-card"> 
+        <div class="meta"></div>
+        <p>
+            SQLを使ってデータベース設計を考える中で、普段何気なく使っている日記アプリやSNSも、<br>
+            多くの情報を整理して管理していることを実感した。<br>
+            特に今回は「写真から思い出を振り返る」という日常に近いテーマだったため、<br>
+            テーブル設計やデータの保存方法をイメージしやすかった。<br>
+            また、感情タグやお気に入り機能などを考えることで、<br>
+            単なるデータ管理ではなく、ユーザー体験も重要であると感じた。<br>
+            SQLは難しいイメージがあったが、身近なサービスと結び付けることで理解しやすくなった。<br>
+        </p>
+        </section>
+    </div>
+
+</body>
